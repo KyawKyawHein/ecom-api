@@ -18,7 +18,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $categories = Category::get();
+        $categories = Category::latest('id')->get();
         return response()->json(CategoryResource::collection($categories));
     }
 
@@ -37,11 +37,11 @@ class CategoryController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(string $slug)
     {
-        $category = Category::find($id);
+        $category = Category::where('slug',$slug)->first();
         if (!$category) {
-            return response()->json(['error' => 'Category not found'], 400);
+            return response()->json(['message' => 'Category not found'], 400);
         }
         return response()->json(new CategoryResource($category));
     }
@@ -53,7 +53,7 @@ class CategoryController extends Controller
     {
         $category = Category::find($id);
         if (!$category) {
-            return response()->json(['error' => "Category not found."], 404);
+            return response()->json(['message' => "Category not found."], 404);
         }
         $category->update([
             'name'=>$request->name,
@@ -69,11 +69,9 @@ class CategoryController extends Controller
     {
         $category = Category::find($id);
         if(!$category){
-            return response()->json(['error'=>"Category not found."],404);
+            return response()->json(['message'=>"Category not found."],404);
         }
         $category->delete();
-        return response()->json([
-            "status"=>"success"
-        ]);
+        return response()->json(new CategoryResource($category));
     }
 }

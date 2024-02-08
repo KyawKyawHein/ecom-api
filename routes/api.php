@@ -55,8 +55,8 @@ Route::post('/login',[AuthController::class,'login']);
 Route::apiResource( '/products', ProductController::class);
 Route::get('/{category}/products',[ProductController::class,'getProductByCategory']);
 Route::get('/latest-products',[ProductController::class,'latestProduct']);
+Route::post('product/upload-photo',[ProductController::class,'uploadPhoto']);
 //Categories
 Route::apiResource('/categories',CategoryController::class);
 //Banner
 Route::get('/banners',[BannerController::class,'index']);
-

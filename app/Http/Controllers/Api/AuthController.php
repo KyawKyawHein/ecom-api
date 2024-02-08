@@ -7,42 +7,38 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use App\Http\Requests\UserRegisterRequest;
+use App\Http\Requests\UserLoginRequest;
+use App\Http\Resources\UserResource;
 
 class AuthController extends Controller
 {
-    public function register(Request $request)
+    public function register(UserRegisterRequest $request)
     {
-        $request->validate([
-            'name' => ['required'],
-            "email" => ['required', 'email'],
-            "password" => ['required', 'confirmed']
-        ]);
+        $data = $request->validated();
         $user = User::create([
-            "name" => $request->name,
-            "email" => $request->email,
-            "password" => Hash::make($request->password),
+            "name" => $data['name'],
+            "email" => $data['email'],
+            "password" => Hash::make($data['password']),
         ]);
         return response()->json([
-            'user' => $user,
+            'user' => new UserResource($user),
             'token' => $user->createToken("api token of $user->name")->plainTextToken
         ]);
     }
 
-    public function login(Request $request)
+    public function login(UserLoginRequest $request)
     {
-        $request->validate([
-            "email" => ['required', 'email'],
-            "password" => ['required'],
-        ]);
+        $data=  $request->validated();
         if (Auth::attempt($request->only(['email', 'password']))) {
             $user = Auth::user();
             $token = $user->createToken("api token of $user->name")->plainTextToken;
             return response()->json([
-                "user" => $user,
+                "user" => new UserResource($user),
                 "token" => $token
             ]);
         } else {
-            return response()->json(['error' => "Invalid credentials"], 401);
+            return response()->json(['message' => "Invalid credentials"], 401);
         }
     }
 

@@ -3,20 +3,16 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\BannerResource;
-use App\Models\Banner;
 use Illuminate\Http\Request;
 
-class BannerController extends Controller
+class AdminController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        // $banners = Banner::where('expire_date','>',now())->get();
-        $banners = Banner::latest()->get();
-        return response()->json(BannerResource::collection($banners));
+        //
     }
 
     /**

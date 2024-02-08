@@ -11,6 +11,7 @@ use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Validator;
 
 class ProductController extends Controller
 {
@@ -19,14 +20,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        if(isset($_GET['category'])){
-            $category = $_GET['category'];
-            $products = Product::whereHas('category',function($query) use ($category){
-                $query->where('slug',$category);
-            })->inRandomOrder()->paginate(10);
-        }else{
-            $products = Product::inRandomOrder()->paginate(10);
-        };
+        $products= Product::latest()->filter(request(['category','search']))->with('category')->paginate(10)->withQueryString();
         return ProductResource::collection($products);
     }
 
@@ -35,11 +29,11 @@ class ProductController extends Controller
      */
     public function store(StoreProductRequest $request)
     {
-
         // move to image
-        $file = $request->file('image');
-        $imgName = uniqid().$file->getClientOriginalName();
-        $file->move(public_path("image/products/"),$imgName);
+        // $file = $request->file('image');
+        // $imgName = uniqid().'.'.$file->getClientOriginalExtension();
+        // $path = 'http://127.0.0.1:8000/image/products/'.$imgName;
+        // $file->move(public_path("image/products/"),$imgName);
 
         $product = Product::create([
             "name" => $request->name,
@@ -48,13 +42,10 @@ class ProductController extends Controller
             "price" => $request->price,
             "stock_quantity" => $request->stock_quantity,
             "category_id" => $request->category_id,
-            "image" => $imgName
+            "image" => $request->image
         ]);
 
-        return response()->json([
-            "status"=>'success',
-            "product"=>new ProductResource($product)
-        ]);
+        return response()->json(new ProductResource($product));
     }
 
     /**
@@ -85,7 +76,8 @@ class ProductController extends Controller
         }else{
             File::delete(public_path("image/products/$product->image"));
             $file = $request->file('image');
-            $imgName = uniqid() . $file->getClientOriginalName();
+            $imgName = uniqid().'.'.$file->getClientOriginalExtension();
+            $path = 'http://127.0.0.1:8000/image/products/'.$imgName;
             $file->move(public_path("image/products/"), $imgName);
         }
 
@@ -97,13 +89,10 @@ class ProductController extends Controller
             "price" => $request->price,
             "stock_quantity" => $request->stock_quantity,
             "category_id" => $request->category_id,
-            "image" => $imgName
+            "image" => $path
         ]);
 
-        return response()->json([
-            "status" => 'success',
-            "product" => new ProductResource($product)
-        ]);
+        return response()->json(new ProductResource($product));
     }
 
     /**
@@ -119,9 +108,7 @@ class ProductController extends Controller
             File::delete(public_path("image/products/$product->image"));
         };
         $product->delete();
-        return response()->json([
-            "status"=>"success"
-        ]);
+        return response()->json(new ProductResource($product));
     }
 
     public function getProductByCategory(string $category){
@@ -141,5 +128,34 @@ class ProductController extends Controller
     public function latestProduct(){
         $product = Product::latest('id')->limit(8)->get();
         return response()->json($product);
+    }
+
+    public function uploadPhoto(Request $request){
+        try {
+            //validation
+            $validator =Validator::make($request->all(),[
+                'image'=>['required','mimes:png,jpg,jpeg']
+            ]);
+
+            if($validator->fails()){
+                $errors= collect($validator->errors())->flatMap(function($e,$field){
+                    return [$field=>$e[0]];
+                });
+                return response()->json([
+                    'errors'=>$errors,
+                    'status'=>400
+                ],400);
+            }
+            $path = 'http://127.0.0.1:8000/image/'.request('image')->store('/products');
+            return response()->json([
+                'path'=>$path,
+                'status'=>200
+            ],200);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'message'=>$e->getMessage(),
+                'status'=>500
+            ],500);
+        }
     }
 }
