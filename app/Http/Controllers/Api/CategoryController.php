@@ -18,8 +18,8 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $categories = Category::latest('id')->get();
-        return response()->json(CategoryResource::collection($categories));
+        $categories = Category::latest('id')->paginate(5);
+        return CategoryResource::collection($categories);
     }
 
     /**
@@ -49,9 +49,9 @@ class CategoryController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateCategoryRequest $request, string $id)
+    public function update(UpdateCategoryRequest $request, string $slug)
     {
-        $category = Category::find($id);
+        $category = Category::where('slug',$slug)->first();
         if (!$category) {
             return response()->json(['message' => "Category not found."], 404);
         }

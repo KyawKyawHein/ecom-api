@@ -27,7 +27,7 @@ class AdminUpdateProductRequest extends FormRequest
             'price'=>['required','integer'],
             'stock_quantity'=>['required','integer'],
             'category_id'=>['required','exists:categories,id'],
-            'image'=>['mimes:png,jpg,jpeg']
+            'image'=>['required']
         ];
     }
 }

@@ -15,7 +15,7 @@ class BannerController extends Controller
     public function index()
     {
         // $banners = Banner::where('expire_date','>',now())->get();
-        $banners = Banner::latest()->get();
+        $banners = Banner::latest('id')->get();
         return response()->json(BannerResource::collection($banners));
     }
 

@@ -8,7 +8,7 @@ use App\Models\Product;
 use App\Http\Resources\ProductResource;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
-class ProductCollection extends ResourceCollection
+class ProductCollection extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -18,12 +18,14 @@ class ProductCollection extends ResourceCollection
     public function toArray(Request $request): array
     {
         return [
-            'data'=>$this->collection->transform(function (Product $product){
-                return new ProductResource($product);
-            }),
-            'meta'=>[
-                "total_users"=>$this->collection->count(),
-            ]
+            "id"=>$this->id,
+            "name"=>$this->name,
+            "description"=>$this->description,
+            "image"=>$this->image,
+            "price"=>$this->price,
+            "slug"=>$this->slug,
+            "stock_quantity"=>$this->stock_quantity,
+            "category"=>$this->category->name
         ];
     }
 }

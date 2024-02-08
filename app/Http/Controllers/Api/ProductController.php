@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
+use App\Http\Resources\ProductCollection;
 use App\Http\Resources\ProductResource;
 use App\Models\Product;
 use App\Models\Category;
@@ -21,7 +22,7 @@ class ProductController extends Controller
     public function index()
     {
         $products= Product::latest()->filter(request(['category','search']))->with('category')->paginate(10)->withQueryString();
-        return ProductResource::collection($products);
+        return ProductCollection::collection($products);
     }
 
     /**
@@ -63,25 +64,23 @@ class ProductController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateProductRequest $request, string $id)
+    public function update(UpdateProductRequest $request, string $slug)
     {
-        $product = Product::find($id);
+        $product = Product::where('slug',$slug)->first();
         if(!$product){
             return response()->json(['error'=>"Product not found."],404);
         }
 
         // if request has image data  move to image. if not use old image
-        if(!$request->file('image')){
-            $imgName = $product->image;
-        }else{
-            File::delete(public_path("image/products/$product->image"));
-            $file = $request->file('image');
-            $imgName = uniqid().'.'.$file->getClientOriginalExtension();
-            $path = 'http://127.0.0.1:8000/image/products/'.$imgName;
-            $file->move(public_path("image/products/"), $imgName);
-        }
-
-
+        // if(!$request->file('image')){
+        //     $imgName = $product->image;
+        // }else{
+        //     File::delete(public_path("image/products/$product->image"));
+        //     $file = $request->file('image');
+        //     $imgName = uniqid().'.'.$file->getClientOriginalExtension();
+        //     $path = 'http://127.0.0.1:8000/image/products/'.$imgName;
+        //     $file->move(public_path("image/products/"), $imgName);
+        // }
         $product->update([
             "name" => $request->name,
             'slug' => Str::slug($request->name),
@@ -89,7 +88,7 @@ class ProductController extends Controller
             "price" => $request->price,
             "stock_quantity" => $request->stock_quantity,
             "category_id" => $request->category_id,
-            "image" => $path
+            "image" => $request->image
         ]);
 
         return response()->json(new ProductResource($product));

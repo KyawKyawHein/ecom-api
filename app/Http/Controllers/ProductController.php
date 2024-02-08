@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\AdminStoreCategoryRequest;
-use App\Http\Requests\AdminUpdateCategoryRequest;
+use App\Http\Requests\AdminStoreProductRequest;
+use App\Http\Requests\AdminUpdateProductRequest;
 use App\Models\Product;
 use App\Models\Category;
 use Illuminate\Support\Facades\File;
@@ -32,7 +32,7 @@ class ProductController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(AdminStoreCategoryRequest $request)
+    public function store(AdminStoreProductRequest $request)
     {
         // store image
         $file = $request->file('image');
@@ -71,7 +71,7 @@ class ProductController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(AdminUpdateCategoryRequest $request, $slug)
+    public function update(AdminUpdateProductRequest $request, $slug)
     {
         $product = Product::where('slug',$slug)->first();
         if($request->image){
