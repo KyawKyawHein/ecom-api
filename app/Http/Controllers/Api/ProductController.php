@@ -133,7 +133,7 @@ class ProductController extends Controller
         try {
             //validation
             $validator =Validator::make($request->all(),[
-                'image'=>['required','mimes:png,jpg,jpeg']
+                'image'=>['required','mimes:png,jpg,jpeg,webp']
             ]);
 
             if($validator->fails()){

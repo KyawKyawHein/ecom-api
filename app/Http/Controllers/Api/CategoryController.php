@@ -19,7 +19,7 @@ class CategoryController extends Controller
     public function index()
     {
         $categories = Category::latest('id')->paginate(5);
-        return CategoryResource::collection($categories);
+        return response()->json(CategoryResource::collection($categories));
     }
 
     /**
