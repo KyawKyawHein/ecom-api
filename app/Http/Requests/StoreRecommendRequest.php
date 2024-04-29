@@ -22,6 +22,8 @@ class StoreRecommendRequest extends FormRequest
     public function rules(): array
     {
         return [
+            "shopId"=> ['required','integer'],
+            "text" => ['required','string']
         ];
     }
 }

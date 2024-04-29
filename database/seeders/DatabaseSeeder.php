@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Shop;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 
@@ -25,6 +26,10 @@ class DatabaseSeeder extends Seeder
             "name" => "Kyaw Kyaw Hein",
             "email" => "hhein6223@gmail.com",
             "password"=>bcrypt('kyawkyawhein'),
+        ]);
+        Shop::factory()->create([
+            "shopId"=>611,
+            "name"=>"MODAMATE"
         ]);
         $this->call([
             CategorySeeder::class,

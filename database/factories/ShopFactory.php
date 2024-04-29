@@ -5,9 +5,9 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Recommend>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Shop>
  */
-class RecommendFactory extends Factory
+class ShopFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -17,9 +17,8 @@ class RecommendFactory extends Factory
     public function definition(): array
     {
         return [
-            "user_id" =>rand(1,11),
-            "shopId" => 611,
-            "text" => fake()->sentence(20)
+            "shopId"=>fake()->randomDigit(),
+            "name"=>fake()->name(),
         ];
     }
 }
