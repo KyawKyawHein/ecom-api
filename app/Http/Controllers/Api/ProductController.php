@@ -19,9 +19,9 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $products= Product::latest()->filter(request(['category','search']))->with('category')->paginate(10)->withQueryString();
+        $products = Product::latest()->filter(request(['gender','category', 'search']))->with('category')->paginate(10)->withQueryString();
         return ProductCollection::collection($products);
     }
 
@@ -38,7 +38,7 @@ class ProductController extends Controller
 
         $product = Product::create([
             "name" => $request->name,
-            'slug' => Str::slug($request->name),
+            'slug' => uniqid() . Str::slug($request->name),
             "description" => $request->description,
             "price" => $request->price,
             "stock_quantity" => $request->stock_quantity,
@@ -54,9 +54,9 @@ class ProductController extends Controller
      */
     public function show(string $slug)
     {
-        $product = Product::with('category')->where('slug',$slug)->first();
-        if(!$product){
-            return response()->json(['error'=>'Product not found'],400);
+        $product = Product::with('category')->where('slug', $slug)->first();
+        if (!$product) {
+            return response()->json(['error' => 'Product not found'], 400);
         }
         return response()->json(new ProductResource($product));
     }
@@ -66,9 +66,9 @@ class ProductController extends Controller
      */
     public function update(UpdateProductRequest $request, string $slug)
     {
-        $product = Product::where('slug',$slug)->first();
-        if(!$product){
-            return response()->json(['error'=>"Product not found."],404);
+        $product = Product::where('slug', $slug)->first();
+        if (!$product) {
+            return response()->json(['error' => "Product not found."], 404);
         }
 
         // if request has image data  move to image. if not use old image
@@ -100,61 +100,64 @@ class ProductController extends Controller
     public function destroy(string $id)
     {
         $product = Product::find($id);
-        if(!$product){
-            return response()->json(['error'=>'Product not found'],404);
+        if (!$product) {
+            return response()->json(['error' => 'Product not found'], 404);
         };
-        if($product->image){
+        if ($product->image) {
             File::delete(public_path("image/products/$product->image"));
         };
         $product->delete();
         return response()->json(new ProductResource($product));
     }
 
-    public function getProductByCategory(string $category){
-        $findCategory = Category::where('slug',$category)->first();
-        if(!$findCategory){
+    public function getProductByCategory(string $category)
+    {
+        $findCategory = Category::where('slug', $category)->first();
+        if (!$findCategory) {
             return response()->json([
-                "error"=>'Category not found'
-            ],400);
+                "error" => 'Category not found'
+            ], 400);
         }
-        $products = Product::with('category')->whereHas('category',function($query) use ($category){
-            $query->where('slug',$category);
-        })->limit(3)->get();
+        $products = Product::with('category')->whereHas('category', function ($query) use ($category) {
+            $query->where('slug', $category);
+        })->get();
 
         return response()->json(ProductResource::collection($products));
     }
 
-    public function latestProduct(){
+    public function latestProduct()
+    {
         $product = Product::latest('id')->limit(8)->get();
         return response()->json($product);
     }
 
-    public function uploadPhoto(Request $request){
+    public function uploadPhoto(Request $request)
+    {
         try {
             //validation
-            $validator =Validator::make($request->all(),[
-                'image'=>['required','mimes:png,jpg,jpeg,webp']
+            $validator = Validator::make($request->all(), [
+                'image' => ['required', 'mimes:png,jpg,jpeg,webp']
             ]);
 
-            if($validator->fails()){
-                $errors= collect($validator->errors())->flatMap(function($e,$field){
-                    return [$field=>$e[0]];
+            if ($validator->fails()) {
+                $errors = collect($validator->errors())->flatMap(function ($e, $field) {
+                    return [$field => $e[0]];
                 });
                 return response()->json([
-                    'errors'=>$errors,
-                    'status'=>400
-                ],400);
+                    'errors' => $errors,
+                    'status' => 400
+                ], 400);
             }
-            $path = 'http://127.0.0.1:8000/image/'.request('image')->store('/products');
+            $path = 'http://127.0.0.1:8000/image/' . request('image')->store('/products');
             return response()->json([
-                'path'=>$path,
-                'status'=>200
-            ],200);
+                'path' => $path,
+                'status' => 200
+            ], 200);
         } catch (\Throwable $e) {
             return response()->json([
-                'message'=>$e->getMessage(),
-                'status'=>500
-            ],500);
+                'message' => $e->getMessage(),
+                'status' => 500
+            ], 500);
         }
     }
 }

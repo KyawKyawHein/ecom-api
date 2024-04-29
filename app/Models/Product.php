@@ -11,6 +11,10 @@ class Product extends Model
     protected $guarded = ['id'];
 
     public function scopeFilter($query,$filter){
+        $query->when($filter['gender'] ?? false ,function($query,$gender){
+            $categoryId = Category::where('slug',$gender)->first()->id;
+            $query->where('category_id',$categoryId);
+        });
         $query->when($filter['search']??false,function($query,$search){
             $query->where('name','LIKE','%'.$search.'%');
         });

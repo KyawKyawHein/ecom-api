@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Api\ShopController;
+use App\Http\Controllers\Api\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
@@ -47,13 +49,14 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::post('remove-all-cart', [CartController::class,'removeAllCart']);
 });
 
-
 Route::post("/register",[AuthController::class,'register']);
 Route::post('/login',[AuthController::class,'login']);
-
+//Shop
+Route::apiResource('/shops',ShopController::class);
+// User
+Route::apiResource('/users',UserController::class);
 // products
 Route::apiResource( '/products', ProductController::class);
-Route::get('/{category}/products',[ProductController::class,'getProductByCategory']);
 Route::get('/latest-products',[ProductController::class,'latestProduct']);
 Route::post('product/upload-photo',[ProductController::class,'uploadPhoto']);
 //Categories

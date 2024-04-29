@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -19,9 +20,16 @@ class DatabaseSeeder extends Seeder
             'email' => 'admin@gmail.com',
             'password'=>bcrypt('kyawkyawhein'),
         ]);
+        User::factory(20)->create();
+        User::factory()->create([
+            "name" => "Kyaw Kyaw Hein",
+            "email" => "hhein6223@gmail.com",
+            "password"=>bcrypt('kyawkyawhein'),
+        ]);
         $this->call([
             CategorySeeder::class,
-            ProductSeeder::class
+            ProductSeeder::class,
+            RecommendSeeder::class,
         ]);
     }
 }
