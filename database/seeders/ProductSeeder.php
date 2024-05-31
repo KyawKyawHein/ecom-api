@@ -15,5 +15,11 @@ class ProductSeeder extends Seeder
     public function run(): void
     {
         Product::factory(30)->create();
+        Product::factory(10)->create([
+            "category_id"=>11
+        ]);
+        Product::factory(10)->create([
+            "category_id"=>12
+        ]);
     }
 }

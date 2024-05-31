@@ -27,4 +27,14 @@ class Product extends Model
     public function category(){
         return $this->belongsTo(Category::class);
     }
+
+    public function colors(){
+        return $this->belongsToMany(Color::class,'color_product_size')->withPivot('price','quantity','size_id')->withTimestamps();
+    }
+    public function sizes(){
+        return $this->belongsToMany(Size::class,'color_product_size')->withPivot('price','quantity','color_id')->withTimestamps();
+    }
+    public function shop(){
+        return $this->belongsTo(Shop::class,'shop_id','shopId');
+    }
 }

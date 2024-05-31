@@ -24,9 +24,9 @@ class RecommendController extends Controller
         }
         $recommends = Recommend::where('shopId',$request->get('shopId'));
         if($request->get('rowCount')){
-            return $recommends->take($request->get('rowCount'))->get();
+            return RecommendResource::collection($recommends->take($request->get('rowCount'))->get());
         }
-        return $recommends->get();
+        return RecommendResource::collection($recommends->get());
     }
 
     /**

@@ -2,11 +2,10 @@
 
 namespace App\Http\Resources;
 
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class RecommendResource extends JsonResource
+class ColorResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -17,9 +16,8 @@ class RecommendResource extends JsonResource
     {
         return [
             "id"=>$this->id,
-            "text"=>$this->text,
-            "user"=>User::find($this->user_id)->name,
-            "user_img"=>User::find($this->user_id)->image
+            "name"=>$this->name,
+            "code"=>$this->code
         ];
     }
 }

@@ -19,11 +19,22 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
-    {
-        $products = Product::latest()->filter(request(['gender','category', 'search']))->with('category')->paginate(10)->withQueryString();
-        return ProductCollection::collection($products);
-    }
+        public function index(Request $request)
+        {
+            // $count = $request->get('count');
+            // $products = Product::latest()->filter(request(['gender','category', 'search']))->with('category','colors','colors.size','sizes','sizes.color');
+            // $countProducts = $products->count();
+            // $filterProducts = $products->take($count??1000)->get();
+            // return $products;
+
+            // return response()->json([
+            //     'data'=>ProductCollection::collection($filterProducts),
+            //     'count'=>$countProducts
+            // ]);
+            $products = Product::latest()->with('sizes','colors')->get();
+            // return $products;
+            return ProductCollection::collection($products);
+        }
 
     /**
      * Store a newly created resource in storage.
@@ -36,17 +47,25 @@ class ProductController extends Controller
         // $path = 'http://127.0.0.1:8000/image/products/'.$imgName;
         // $file->move(public_path("image/products/"),$imgName);
 
+        // need shopId and color
         $product = Product::create([
+            "shop_id"=>$request->shopId,
             "name" => $request->name,
-            'slug' => uniqid() . Str::slug($request->name),
+            'slug' => uniqid() . Str::slug($request->name).uniqid(),
             "description" => $request->description,
-            "price" => $request->price,
-            "stock_quantity" => $request->stock_quantity,
-            "category_id" => $request->category_id,
-            "image" => $request->image
+            "category_id" => $request->category,
+            "image" => $request->image,
+            "price"=>$request->price
         ]);
-
-        return response()->json(new ProductResource($product));
+        foreach($request->size as $sizeId){
+            foreach($request->quantity as $productCount){
+                $product->sizes()->attach($sizeId, [
+                    'color' => $productCount['color'],
+                    'quantity'=>$productCount['count']
+                ]);
+            }
+        }
+        return response()->json('Products create successfully',200);
     }
 
     /**

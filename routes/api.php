@@ -1,7 +1,9 @@
 <?php
 
+use App\Http\Controllers\Api\ColorController;
 use App\Http\Controllers\Api\RecommendController;
 use App\Http\Controllers\Api\ShopController;
+use App\Http\Controllers\Api\SizeController;
 use App\Http\Controllers\Api\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -48,8 +50,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/show-cart', [CartController::class, 'showCart']);
     Route::post('remove-from-cart', [CartController::class, 'removeFromCart']);
     Route::post('remove-all-cart', [CartController::class, 'removeAllCart']);
-    // Recommend
-    Route::apiResource('/recommends', RecommendController::class);
+    Route::post('/recommends',[RecommendController::class,'create']);
 });
 
 Route::post("/register", [AuthController::class, 'register']);
@@ -58,11 +59,17 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::apiResource('/shops', ShopController::class);
 // User
 Route::apiResource('/users', UserController::class);
+// Recommend
+Route::apiResource('/recommends', RecommendController::class);
 // products
 Route::apiResource('/products', ProductController::class);
 Route::get('/latest-products', [ProductController::class, 'latestProduct']);
 Route::post('product/upload-photo', [ProductController::class, 'uploadPhoto']);
+// Color
+Route::apiResource('/colors',ColorController::class);
 //Categories
 Route::apiResource('/categories', CategoryController::class);
 //Banner
 Route::get('/banners', [BannerController::class, 'index']);
+//Size
+Route::get('/sizes',[SizeController::class, 'index']);

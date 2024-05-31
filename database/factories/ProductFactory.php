@@ -18,11 +18,13 @@ class ProductFactory extends Factory
     public function definition(): array
     {
         return [
+            "shop_id"=>611,
             "name"=>fake()->name(),
             "slug"=>fake()->slug(),
+            "image"=>"https://i.pravatar.cc/150?img=".rand(1,70),
             "description"=>fake()->sentence(),
             "price"=>fake()->numberBetween(1000,10000),
-            "stock_quantity"=>fake()->randomDigit(),
+            // "stock_quantity"=>fake()->randomDigit(),
             "category_id"=>Category::all()->random()->id,
         ];
     }
