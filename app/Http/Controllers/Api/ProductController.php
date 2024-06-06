@@ -21,18 +21,7 @@ class ProductController extends Controller
      */
         public function index(Request $request)
         {
-            // $count = $request->get('count');
-            // $products = Product::latest()->filter(request(['gender','category', 'search']))->with('category','colors','colors.size','sizes','sizes.color');
-            // $countProducts = $products->count();
-            // $filterProducts = $products->take($count??1000)->get();
-            // return $products;
-
-            // return response()->json([
-            //     'data'=>ProductCollection::collection($filterProducts),
-            //     'count'=>$countProducts
-            // ]);
-            $products = Product::latest()->with('sizes','colors')->get();
-            // return $products;
+            $products = Product::with('sizes')->paginate(8)->withQueryString();
             return ProductCollection::collection($products);
         }
 
@@ -73,11 +62,17 @@ class ProductController extends Controller
      */
     public function show(string $slug)
     {
-        $product = Product::with('category')->where('slug', $slug)->first();
-        if (!$product) {
-            return response()->json(['error' => 'Product not found'], 400);
+        // $product = Product::with('category')->where('slug', $slug)->first();
+        // if (!$product) {
+        //     return response()->json(['error' => 'Product not found'], 400);
+        // }
+        // return response()->json(new ProductResource($product));
+        $product = Product::where('slug',$slug)->with('sizes')->first();
+        if(!$product){
+            return response()->json("Products not found",404);
+        }else{
+            return new ProductCollection($product);
         }
-        return response()->json(new ProductResource($product));
     }
 
     /**

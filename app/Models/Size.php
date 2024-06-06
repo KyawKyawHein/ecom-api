@@ -11,11 +11,7 @@ class Size extends Model
     protected $guarded = ['id'];
 
     public function products(){
-        return $this->belongsToMany(Product::class)->withPivot('price','quantity','color_id');
-    }
-
-    public function colors(){
-        return $this->belongsToMany(Color::class)->withPivot('price','quantity','size_id');
+        return $this->belongsToMany(Product::class)->withPivot('quantity','color');
     }
 
 }

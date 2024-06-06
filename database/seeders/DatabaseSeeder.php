@@ -3,12 +3,9 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use App\Models\Color;
-use App\Models\Product;
 use App\Models\Shop;
 use App\Models\Size;
 use App\Models\User;
-use Database\Factories\ProductFactory;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder

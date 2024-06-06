@@ -19,17 +19,22 @@ class ProductCollection extends JsonResource
     public function toArray(Request $request): array
     {
         $products = [];
-        foreach(Size::all() as $size){
+        $sizesArr = [];
+        foreach($this->sizes as $size){
+            $name  =$size->name;
+            if(!in_array($name,$sizesArr)){
+                $sizesArr[] = $name;
+            }
+        }
+        foreach($sizesArr as $size){
             $products[] = [
-                'size' => $size->name,
-                'availableColor'=>$this->colors()->where('size_id',$size->id)->get()->map(function ($color){
+                'size' => $size,
+                'availableColor'=>$this->sizes()->where('name',$size)->get()->map(function ($product){
                   return [
-                    "name"=>$color->name,
-                    "code"=>$color->code
+                    "color"=>$product->pivot->color,
+                    "quantity"=>$product->pivot->quantity
                   ];
                 }),
-                'price' => $this->colors()->where('size_id',$size->id)->first()->pivot->price,
-                'quantity'=>$this->colors()->where('size_id',$size->id)->first()->pivot->quantity
             ];
         }
         return [
@@ -42,7 +47,9 @@ class ProductCollection extends JsonResource
             ],
             "image"=>$this->image,
             "description"=>$this->description,
-            "products"=>$products
+            "price"=>$this->price,
+            "size"=>$sizesArr,
+            "products"=>$products,
         ];
     }
 }

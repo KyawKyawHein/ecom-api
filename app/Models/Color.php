@@ -12,9 +12,9 @@ class Color extends Model
     protected $guarded = ['id'];
 
     public function products(){
-        return $this->belongsToMany(Product::class)->withPivot('price','quantity','size_id');
+        return $this->belongsToMany(Product::class)->withPivot('quantity','size_id');
     }
     public function sizes(){
-        return $this->belongsToMany(Size::class)->withPivot('price','quantity','color_id');
+        return $this->belongsToMany(Size::class)->withPivot('quantity','product_id');
     }
 }
