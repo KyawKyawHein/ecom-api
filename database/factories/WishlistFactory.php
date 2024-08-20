@@ -5,9 +5,9 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Shop>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Wishlist>
  */
-class ShopFactory extends Factory
+class WishlistFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -17,8 +17,7 @@ class ShopFactory extends Factory
     public function definition(): array
     {
         return [
-            "shopId"=>fake()->randomDigit(),
-            "name"=>fake()->name(),
+            //
         ];
     }
 }

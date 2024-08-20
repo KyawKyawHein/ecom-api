@@ -21,7 +21,12 @@ class ProductController extends Controller
      */
         public function index(Request $request)
         {
-            $products = Product::with('sizes')->paginate(8)->withQueryString();
+            $products = Product::with('sizes')->filter($request->only(['category','search']));
+            if($request->page){
+                $products = $products->paginate(8);
+            }else{
+                $products = $products->get();
+            }
             return ProductCollection::collection($products);
         }
 
@@ -38,7 +43,7 @@ class ProductController extends Controller
 
         // need shopId and color
         $product = Product::create([
-            "shop_id"=>$request->shopId,
+            "branchId"=>$request->branchId,
             "name" => $request->name,
             'slug' => uniqid() . Str::slug($request->name).uniqid(),
             "description" => $request->description,

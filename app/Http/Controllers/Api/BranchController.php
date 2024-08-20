@@ -3,32 +3,32 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreShopRequest;
-use App\Http\Resources\ShopResource;
-use App\Models\Shop;
+use App\Http\Requests\StoreBranchRequest;
+use App\Http\Resources\BranchResource;
+use App\Models\Branch;
 use Illuminate\Http\Request;
 
-class ShopController extends Controller
+class BranchController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $shops = Shop::latest('id')->get();
-        return ShopResource::collection($shops);
+        $shops = Branch::latest('id')->get();
+        return BranchResource::collection($shops);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreShopRequest $request)
+    public function store(StoreBranchRequest $request)
     {
-        $shop = Shop::create([
+        $shop = Branch::create([
             "shopId" => $request->shopId,
             "name" => $request->name,
         ]);
-        return response()->json(new ShopResource($shop));
+        return response()->json(new BranchResource($shop));
     }
 
     /**

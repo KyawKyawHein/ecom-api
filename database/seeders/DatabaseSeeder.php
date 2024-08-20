@@ -3,10 +3,13 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use App\Models\Shop;
+use App\Models\Branch;
+use App\Models\Color;
+use App\Models\Product;
 use App\Models\Size;
 use App\Models\User;
 use Illuminate\Database\Seeder;
+use Faker\Factory as Fake;
 
 class DatabaseSeeder extends Seeder
 {
@@ -28,13 +31,14 @@ class DatabaseSeeder extends Seeder
             "email" => "hhein6223@gmail.com",
             "password" => bcrypt('kyawkyawhein'),
         ]);
-        Shop::factory()->create([
-            "shopId" => 611,
-            "name" => "MODAMATE"
+        Branch::factory()->create([
+            "branchId" => 611,
+            "branchName" => "Kyimyindine"
         ]);
         $this->call([
             CategorySeeder::class,
             RecommendSeeder::class,
+            ProductSeeder::class,
         ]);
         //size seeder
         $sizes = ['XS', 'SM', 'M', 'L', 'XL', '2XL', '3XL'];
@@ -43,9 +47,23 @@ class DatabaseSeeder extends Seeder
                 "name" => $size
             ]);
         }
-
-        // color seeder
-        // $products = Product::factory(4)->create();
+        //color_product_size
+        $faker =Fake::create();
+        foreach (Product::all() as $product) {
+            $sizes = Size::all()->random(3);
+            $randomColors =[];
+            for($i=0;$i<3;$i++){
+                $randomColors[]=$faker->hexColor();
+            };
+            foreach($sizes as $size){
+                foreach($randomColors as $color){
+                    $product->sizes()->attach($size->id, [
+                        'color' => $color,
+                        'quantity' => fake()->numberBetween(1, 10),
+                    ]);
+                }
+            }
+        }
 
 
         //attach

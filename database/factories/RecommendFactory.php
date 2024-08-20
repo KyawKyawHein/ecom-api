@@ -19,8 +19,8 @@ class RecommendFactory extends Factory
         $userIds = range(1,20);
         shuffle($userIds);
         return [
-            "user_id" =>array_shift($userIds),
-            "shopId" => 611,
+            "userId" =>array_shift($userIds),
+            "branchId" => 611,
             "text" => fake()->sentence(20)
         ];
     }

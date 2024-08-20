@@ -11,12 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('recommends', function (Blueprint $table) {
+        Schema::create('branches', function (Blueprint $table) {
             $table->id();
-            //fix later
             $table->integer('branchId');
-            $table->integer('userId');
-            $table->text('text');
+            $table->string('branchName');
             $table->timestamps();
         });
     }
@@ -26,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('recommends');
+        Schema::dropIfExists('shops');
     }
 };

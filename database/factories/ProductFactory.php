@@ -18,7 +18,7 @@ class ProductFactory extends Factory
     public function definition(): array
     {
         return [
-            "shop_id"=>611,
+            "branchId"=>611,
             "name"=>fake()->name(),
             "slug"=>fake()->slug(),
             "image"=>"https://i.pravatar.cc/150?img=".rand(1,70),
