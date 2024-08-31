@@ -44,6 +44,3 @@ use App\Http\Controllers\TransactionController;
 //     Route::post('/order/{id}/accept',[OrderController::class,'acceptStatus'])->name('orders.accept');
 //     Route::post('/order/{id}/cancel',[OrderController::class,'cancelStatus'])->name('orders.cancel');
 // });
-Route::get('/', function () {
-    return 'welcome';
-});

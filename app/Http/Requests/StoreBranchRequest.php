@@ -22,7 +22,7 @@ class StoreBranchRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "branchId" => ['required','integer','unique:shops,shopId'],
+            "branchId" => ['required','integer','unique:branches,branchId'],
             "branchName"=> ['required','string']
         ];
     }

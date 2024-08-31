@@ -17,16 +17,16 @@ class RecommendController extends Controller
      */
     public function index(Request $request)
     {
-        if(!$request->get('shopId')){
-            return response()->json(['error' => 'Shop ID is required'], 400);
-        }elseif(!Shop::where('shopId',$request->get('shopId'))->exists()){
-            return response()->json(['error' => 'Shop not found'], 400);
-        }
-        $recommends = Recommend::where('shopId',$request->get('shopId'));
-        if($request->get('rowCount')){
-            return RecommendResource::collection($recommends->take($request->get('rowCount'))->get());
-        }
-        return RecommendResource::collection($recommends->get());
+        // if(!$request->get('shopId')){
+        //     return response()->json(['error' => 'Shop ID is required'], 400);
+        // }elseif(!Shop::where('shopId',$request->get('shopId'))->exists()){
+        //     return response()->json(['error' => 'Shop not found'], 400);
+        // }
+        // $recommends = Recommend::where('shopId',$request->get('shopId'));
+        // if($request->get('rowCount')){
+        //     return RecommendResource::collection($recommends->take($request->get('rowCount'))->get());
+        // }
+        // return RecommendResource::collection($recommends->get());
     }
 
     /**
@@ -34,17 +34,17 @@ class RecommendController extends Controller
      */
     public function store(StoreRecommendRequest $request)
     {
-        if(!$request->get('shopId')){
-            return response()->json(['error' => 'Shop ID is required'], 400);
-        }elseif(!Shop::where('shopId',$request->get('shopId'))->exists()){
-            return response()->json(['error' => 'Shop not found'], 400);
-        }
-        $recommend = Recommend::create([
-            "shopId" => $request->get('shopId'),
-            "user_id" => Auth::id(),
-            "text" => $request->get('text'),
-        ]);
-        return response()->json(new RecommendResource($recommend),201);
+        // if(!$request->get('shopId')){
+        //     return response()->json(['error' => 'Shop ID is required'], 400);
+        // }elseif(!Shop::where('shopId',$request->get('shopId'))->exists()){
+        //     return response()->json(['error' => 'Shop not found'], 400);
+        // }
+        // $recommend = Recommend::create([
+        //     "shopId" => $request->get('shopId'),
+        //     "user_id" => Auth::id(),
+        //     "text" => $request->get('text'),
+        // ]);
+        // return response()->json(new RecommendResource($recommend),201);
     }
 
     /**
@@ -52,16 +52,16 @@ class RecommendController extends Controller
      */
     public function show(string $id,Request $request)
     {
-        if(!$request->get('shopId')){
-            return response()->json(['error' => 'Shop ID is required'], 400);
-        }elseif(!Shop::where('shopId',$request->get('shopId'))->exists()){
-            return response()->json(['error' => 'Shop not found'], 400);
-        }
-        $recommend = Recommend::where('shopId',$request->get('shopId'))->where('id',$id)->first();
-        if(!$recommend){
-            return response()->json(['error' => 'Recommend not found'], 404);
-        }
-        return new RecommendResource($recommend);
+        // if(!$request->get('shopId')){
+        //     return response()->json(['error' => 'Shop ID is required'], 400);
+        // }elseif(!Shop::where('shopId',$request->get('shopId'))->exists()){
+        //     return response()->json(['error' => 'Shop not found'], 400);
+        // }
+        // $recommend = Recommend::where('shopId',$request->get('shopId'))->where('id',$id)->first();
+        // if(!$recommend){
+        //     return response()->json(['error' => 'Recommend not found'], 404);
+        // }
+        // return new RecommendResource($recommend);
     }
 
     /**
@@ -69,16 +69,16 @@ class RecommendController extends Controller
      */
     public function destroy(string $id,Request $request)
     {
-        if(!$request->get('shopId')){
-            return response()->json(['error' => 'Shop ID is required'], 400);
-        }elseif(!Shop::where('shopId',$request->get('shopId'))->exists()){
-            return response()->json(['error' => 'Shop not found'], 400);
-        }
-        $recommend = Recommend::where('shopId',$request->get('shopId'))->where('id',$id)->first();
-        if(!$recommend){
-            return response()->json(['error' => 'Recommend not found'], 404);
-        }
-        $recommend->delete();
-        return response()->json(null,204);
+        // if(!$request->get('shopId')){
+        //     return response()->json(['error' => 'Shop ID is required'], 400);
+        // }elseif(!Shop::where('shopId',$request->get('shopId'))->exists()){
+        //     return response()->json(['error' => 'Shop not found'], 400);
+        // }
+        // $recommend = Recommend::where('shopId',$request->get('shopId'))->where('id',$id)->first();
+        // if(!$recommend){
+        //     return response()->json(['error' => 'Recommend not found'], 404);
+        // }
+        // $recommend->delete();
+        // return response()->json(null,204);
     }
 }

@@ -15,8 +15,8 @@ class BranchController extends Controller
      */
     public function index()
     {
-        $shops = Branch::latest('id')->get();
-        return BranchResource::collection($shops);
+        $branches = Branch::latest('id')->get();
+        return BranchResource::collection($branches);
     }
 
     /**
@@ -24,11 +24,11 @@ class BranchController extends Controller
      */
     public function store(StoreBranchRequest $request)
     {
-        $shop = Branch::create([
-            "shopId" => $request->shopId,
-            "name" => $request->name,
+        $branch = Branch::create([
+            "branchId" => $request->branchId,
+            "branchName" => $request->branchName,
         ]);
-        return response()->json(new BranchResource($shop));
+        return response()->json(new BranchResource($branch));
     }
 
     /**
@@ -36,7 +36,8 @@ class BranchController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $branch = Branch::find($id);
+        return response()->json(new BranchResource($branch));
     }
 
     /**

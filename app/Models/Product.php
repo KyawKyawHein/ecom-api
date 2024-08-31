@@ -34,8 +34,5 @@ class Product extends Model
     {
         return $this->belongsToMany(Size::class, 'color_product_size')->withPivot('quantity', 'color')->withTimestamps();
     }
-    // public function branch()
-    // {
-    //     return $this->belongsTo(Branch::class, 'shop_id', 'shopId');
-    // }
+
 }

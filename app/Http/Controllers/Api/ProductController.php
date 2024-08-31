@@ -41,7 +41,7 @@ class ProductController extends Controller
         // $path = 'http://127.0.0.1:8000/image/products/'.$imgName;
         // $file->move(public_path("image/products/"),$imgName);
 
-        // need shopId and color
+        // need branchId and color
         $product = Product::create([
             "branchId"=>$request->branchId,
             "name" => $request->name,
