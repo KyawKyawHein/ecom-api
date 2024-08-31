@@ -1,8 +1,8 @@
 <?php
 
+use App\Http\Controllers\Api\BranchController;
 use App\Http\Controllers\Api\ColorController;
 use App\Http\Controllers\Api\RecommendController;
-use App\Http\Controllers\Api\ShopController;
 use App\Http\Controllers\Api\SizeController;
 use App\Http\Controllers\Api\UserController;
 use Illuminate\Http\Request;
@@ -58,7 +58,7 @@ Route::middleware('auth:sanctum')->group(function () {
 Route::post("/register", [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 //Shop
-Route::apiResource('/shops', ShopController::class);
+Route::apiResource('/branches', BranchController::class);
 // User
 Route::apiResource('/users', UserController::class);
 // Recommend
