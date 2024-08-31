@@ -43,14 +43,16 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/get_users_orders/{id}', 'get_user_orders');
         Route::post('/change_order_status/{id}', 'change_order_status');
     });
-    //add money
-    Route::post('/add-money', [TransactionController::class, 'addMoney']);
     //add to cart
     Route::post('/add-to-cart', [CartController::class, 'addToCart']);
     Route::get('/show-cart', [CartController::class, 'showCart']);
     Route::post('remove-from-cart', [CartController::class, 'removeFromCart']);
     Route::post('remove-all-cart', [CartController::class, 'removeAllCart']);
     Route::post('/recommends',[RecommendController::class,'create']);
+
+    // Currently not used api
+    //add money
+    Route::post('/add-money', [TransactionController::class, 'addMoney']);
 });
 
 Route::post("/register", [AuthController::class, 'register']);
